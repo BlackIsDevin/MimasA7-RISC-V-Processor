@@ -16,7 +16,7 @@
 
     @param {1} aSel: output 1-bit EXE A Mux select flag, selects a input for ALU
     @param {1} bSel: output 1-bit EXE B Mux select flag, selects b input for ALU
-    @param {3} aluc: output 3-bit ALU control field, selects ALU operation
+    @param {4} aluc: output 4-bit ALU control field, selects ALU operation
     @param {1} rSel: output 1-bit EXE R Mux select flag, selects whether result for
         MEM & WB stages should use output from ALU or Comparator as a result value
     @param {1} wmem: output 1-bit MEM stage write flag, indicates whether MEM stage
@@ -51,7 +51,7 @@ module ControlUnit (
 
     output reg aSel,
     output reg [1:0] bSel,
-    output reg [2:0] aluc,
+    output reg [3:0] aluc,
     output reg rSel,
     output reg wmem, m2reg, wreg,
     output reg [2:0] immType,
