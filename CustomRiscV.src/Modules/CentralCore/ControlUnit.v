@@ -64,45 +64,77 @@ module ControlUnit (
     always @(*) begin
         case (opcode) 
             7'b0110011: begin // register arithmetic operations
-
+                aSel = 1'b0;
+                bSel = 2'b0;
+                wmem = 1'b0;
+                m2reg = 1'b0;
+                wreg = 1'b1;
+                immType = 1'bx;
+                isJalr = 1'bx;
+                pcSel = 1'b0;
                 case (funct3)
                     3'b000: begin // ADD & SUB
-
+                        aluc = funct7[5] ? 4'h1 : 4'h0;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b111: begin // AND
-
+                        aluc = 4'h2;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b110: begin // OR
-
+                        aluc = 4'h3;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b100: begin // XOR
-
+                        aluc = 4'h4;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b001: begin // SLL
-
+                        aluc = 4'h5;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b101: begin // SRL & SRA
-
+                        aluc = funct7[5] ? 4'h7 : 4'h6;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b010: begin // SLT
-
+                        aluc = 4'hx;
+                        rSel = 1'b1;
+                        signedComp = 1'b1;
                     end
                     3'b011: begin // SLTU
-
+                        aluc = 4'hx;
+                        rSel = 1'b1;
+                        signedComp = 1'b0;
                     end
                 endcase
             end
             7'b0111011: begin // 32-bit register arithmetic operations
-
+                aSel = 1'b0;
+                bSel = 1'b0;
+                rSel = 1'b0;
+                wmem = 1'b0;
+                m2reg = 1'b0;
+                wreg = 1'b1;
+                immType = 1'bx;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
+                pcSel = 1'b0;
                 case (funct3)
                     3'b000: begin // ADDW & SUBW
-
+                        aluc = funct7[5] ? 4'h9 : 4'h8;
                     end
                     3'b001: begin // SLLW
-
+                        aluc = 4'hD;
                     end
                     3'b101: begin // SRLW & SRAW                    
-
+                        aluc = funct7[5] ? 4'hF : 4'hE;
                     end
                 endcase
             end
