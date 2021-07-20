@@ -69,9 +69,9 @@ module ControlUnit (
                 wmem = 1'b0;
                 m2reg = 1'b0;
                 wreg = 1'b1;
-                immType = 1'bx;
+                immType = 3'bx;
                 isJalr = 1'bx;
-                pcSel = 1'b0;
+                pcSel = 2'b0;
                 case (funct3)
                     3'b000: begin // ADD & SUB
                         aluc = funct7[5] ? 4'h1 : 4'h0;
@@ -117,15 +117,15 @@ module ControlUnit (
             end
             7'b0111011: begin // 32-bit register arithmetic operations
                 aSel = 1'b0;
-                bSel = 1'b0;
+                bSel = 2'b0;
                 rSel = 1'b0;
                 wmem = 1'b0;
                 m2reg = 1'b0;
                 wreg = 1'b1;
-                immType = 1'bx;
+                immType = 3'bx;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
-                pcSel = 1'b0;
+                pcSel = 2'b0;
                 case (funct3)
                     3'b000: begin // ADDW & SUBW
                         aluc = funct7[5] ? 4'h9 : 4'h8;
@@ -139,45 +139,77 @@ module ControlUnit (
                 endcase
             end
             7'b0010011: begin // immediate arithmetic operations
-
+                aSel = 1'b0;
+                bSel = 2'b1;
+                wmem = 1'b0;
+                m2reg = 1'b0;
+                wreg = 1'b1;
+                immType = 3'h0;
+                isJalr = 1'bx;
+                pcSel = 2'b0;
                 case (funct3)
                     3'b000: begin // ADDI
-
+                        aluc = 4'h0;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b111: begin // ANDI
-
+                        aluc = 4'h2;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b110: begin // ORI
-
+                        aluc = 4'h3;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b100: begin // XORI
-
+                        aluc = 4'h4;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b001: begin // SLLI
-
+                        aluc = 4'h5;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b101: begin // SRLI & SRAI
-
+                        aluc = funct7[5] ? 4'h7 : 4'h6;
+                        rSel = 1'b0;
+                        signedComp = 1'bx;
                     end
                     3'b010: begin // SLTI
-
+                        aluc = 4'hx;
+                        rSel = 1'b1;
+                        signedComp = 1'b1;
                     end
                     3'b011: begin // SLTIU
-                    
+                        aluc = 4'hx;
+                        rSel = 1'b1;
+                        signedComp = 1'b0;
                     end
                 endcase
             end
             7'b0011011: begin // 32-bit immediate arithmetic operations
-
+                aSel = 1'b0;
+                bSel = 2'b0;
+                rSel = 1'b0;
+                wmem = 1'b0;
+                m2reg = 1'b0;
+                wreg = 1'b1;
+                immType = 3'bx;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
+                pcSel = 2'b0;
                 case (funct3)
                     3'b000: begin // ADDIW
-
+                        aluc = 4'h8;
                     end
                     3'b001: begin // SLLIW
-
+                        aluc = 4'hD;
                     end
                     3'b101: begin // SRLIW & SRAWI
-
+                        aluc = funct7[5] ? 4'hF : 4'hE;
                     end
                 endcase
             end
