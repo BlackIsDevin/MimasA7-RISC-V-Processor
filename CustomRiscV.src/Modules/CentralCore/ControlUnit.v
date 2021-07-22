@@ -299,23 +299,86 @@ module ControlUnit (
                 isJalr = 1'bx;
                 signedComp = 1'bx;
             end
-            7'b1110011: begin // ECALL & EBREAK (unimplemented in this version)
-
+            7'b1110011: begin // ECALL & EBREAK (unimplemented/NOP in this version)
+                aSel = 1'bx;
+                bSel = 2'hx;
+                aluc = 4'hx;
+                rSel = 1'bx;
+                wmem = 1'b0;
+                m2reg = 1'bx;
+                wreg = 1'b0;
+                immType = 3'hx;
+                isBranch = 1'b0;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
             end
             7'b0110111: begin // LUI
-
+                aSel = 1'bx;
+                bSel = 2'h1
+                aluc = 4'hB;
+                rSel = 1'b0;
+                wmem = 1'b0;
+                m2reg = 1'b0;
+                wreg = 1'b1;
+                immType = 3'h3;
+                isBranch = 1'b0;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
             end
             7'b0010111: begin // AUIPC
-
+                aSel = 1'b1;
+                bSel = 2'h1;
+                aluc = 4'h0;
+                rSel = 1'b0;
+                wmem = 1'b0;
+                m2reg = 1'b0;
+                wreg = 1'b1;
+                immType = 3'h3;
+                isBranch = 1'b0;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
             end
             7'b1101111: begin // JAL
-
+                aSel = 1'b1;
+                bSel = 2'h2;
+                aluc = 4'h0;
+                rSel = 1'b0;
+                wmem = 1'b0;
+                m2reg = 1'b0;
+                wreg = 1'b1;
+                immType = 3'h4;
+                isBranch = 1'b0;
+                isJalr = 1'b0;
+                signedComp = 1'bx;
             end
             7'b1100111: begin // JALR
-
+                aSel = 1'b1;
+                bSel = 2'h2;
+                aluc = 4'h0;
+                rSel = 1'b0;
+                wmem = 1'b0;
+                m2reg = 1'b0;
+                wreg = 1'b1;
+                immType = 3'h0;
+                isBranch = 1'b0;
+                isJalr = 1'b1;
+                signedComp = 1'bx;
             end
             default: begin // handle invalid or unimplemented instructions
-
+                // for now, the behavior of invalid or unimplemented instructions
+                // is to interpret it as a NOP and just keep going, this will later
+                // be changed to an exception once the hardware is more developed
+                aSel = 1'bx;
+                bSel = 2'hx;
+                aluc = 4'hx;
+                rSel = 1'bx;
+                wmem = 1'b0;
+                m2reg = 1'bx;
+                wreg = 1'b0;
+                immType = 3'hx;
+                isBranch = 1'b0;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
             end
         endcase
     end
