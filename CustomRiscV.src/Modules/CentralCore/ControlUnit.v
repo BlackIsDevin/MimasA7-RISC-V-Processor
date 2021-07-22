@@ -69,9 +69,9 @@ module ControlUnit (
                 wmem = 1'b0;
                 m2reg = 1'b0;
                 wreg = 1'b1;
-                immType = 3'bx;
+                immType = 3'hx;
                 isJalr = 1'bx;
-                pcSel = 2'b0;
+                pcSel = 2'h0;
                 case (funct3)
                     3'b000: begin // ADD & SUB
                         aluc = funct7[5] ? 4'h1 : 4'h0;
@@ -125,7 +125,7 @@ module ControlUnit (
                 immType = 3'bx;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
-                pcSel = 2'b0;
+                pcSel = 2'h0;
                 case (funct3)
                     3'b000: begin // ADDW & SUBW
                         aluc = funct7[5] ? 4'h9 : 4'h8;
@@ -146,7 +146,7 @@ module ControlUnit (
                 wreg = 1'b1;
                 immType = 3'h0;
                 isJalr = 1'bx;
-                pcSel = 2'b0;
+                pcSel = 2'h0;
                 case (funct3)
                     3'b000: begin // ADDI
                         aluc = 4'h0;
@@ -192,15 +192,15 @@ module ControlUnit (
             end
             7'b0011011: begin // 32-bit immediate arithmetic operations
                 aSel = 1'b0;
-                bSel = 2'b0;
+                bSel = 2'h0;
                 rSel = 1'b0;
                 wmem = 1'b0;
                 m2reg = 1'b0;
                 wreg = 1'b1;
-                immType = 3'bx;
+                immType = 3'hx;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
-                pcSel = 2'b0;
+                pcSel = 2'h0;
                 case (funct3)
                     3'b000: begin // ADDIW
                         aluc = 4'h8;
@@ -214,25 +214,33 @@ module ControlUnit (
                 endcase
             end
             7'b1100011: begin // Branch operations
-
+                aSel = 1'b1;
+                bSel = 2'h1;
+                aluc = 4'h0;
+                rSel = 1'bx;
+                wmem = 1'b0;
+                m2reg = 1'bx;
+                wreg = 1'b0;
+                immType = 3'h2;
+                isJalr = 1'bx;
                 case (funct3)
                     3'b000: begin // BEQ
-
+                        signedComp = 1'bx;
                     end
                     3'b001: begin // BNE
-
+                        signedComp = 1'bx;
                     end
                     3'b100: begin // BLT
-
+                        signedComp = 1'b1;
                     end
                     3'b101: begin // BGE
-
+                        signedComp = 1'b1;
                     end
                     3'b110: begin // BLTU
-
+                        signedComp = 1'b0;
                     end
                     3'b111: begin // BGEU
-
+                        signedComp = 1'b0;
                     end
                 endcase
             end
