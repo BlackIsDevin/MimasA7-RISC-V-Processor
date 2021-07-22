@@ -87,7 +87,6 @@ module ControlUnit (
                 immType = 3'hx;
                 isBranch = 1'b0;
                 isJalr = 1'bx;
-                pcSel = 2'h0;
                 case (funct3)
                     3'b000: begin // ADD & SUB
                         aluc = funct7[5] ? 4'h1 : 4'h0;
@@ -142,7 +141,6 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
-                pcSel = 2'h0;
                 case (funct3)
                     3'b000: begin // ADDW & SUBW
                         aluc = funct7[5] ? 4'h9 : 4'h8;
@@ -164,7 +162,6 @@ module ControlUnit (
                 immType = 3'h0;
                 isBranch = 1'b0;
                 isJalr = 1'bx;
-                pcSel = 2'h0;
                 case (funct3)
                     3'b000: begin // ADDI
                         aluc = 4'h0;
@@ -219,7 +216,6 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
-                pcSel = 2'h0;
                 case (funct3)
                     3'b000: begin // ADDIW
                         aluc = 4'h8;
