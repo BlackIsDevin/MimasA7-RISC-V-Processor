@@ -261,13 +261,43 @@ module ControlUnit (
                 endcase
             end
             7'b0000011: begin // Loads
-                
+                aSel = 1'b0;
+                bSel = 2'h1;
+                aluc = 4'h0;
+                rSel = 1'b0;
+                wmem = 1'b0;
+                m2reg = 1'b1;
+                wreg = 1'b1;
+                immType = 3'h0;
+                isBranch = 1'b0;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
             end
             7'b0100011: begin // Stores
-
+                aSel = 1'b0;
+                bSel = 2'h1;
+                aluc = 4'h0;
+                rSel = 1'b0;
+                wmem = 1'b1;
+                m2reg = 1'bx;
+                wreg = 1'b0;
+                immType = 3'h1;
+                isBranch = 1'b0;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
             end
             7'b0001111: begin // FENCE (no operation in our implementation)
-
+                aSel = 1'bx;
+                bSel = 2'hx;
+                aluc = 4'hx;
+                rSel = 1'bx;
+                wmem = 1'b0;
+                m2reg = 1'bx;
+                wreg = 1'b0;
+                immType = 3'hx;
+                isBranch = 1'b0;
+                isJalr = 1'bx;
+                signedComp = 1'bx;
             end
             7'b1110011: begin // ECALL & EBREAK (unimplemented in this version)
 
