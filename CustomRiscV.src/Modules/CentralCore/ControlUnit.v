@@ -13,6 +13,10 @@
     @param {1} lt: input 1-bit less-than flag from EXE stage, indicates eqa < eqb
     @param {5} erd: input 5-bit destination register from EXE stage
     @param {5} mrd: input 5-bit destination register from MEM stage
+    @param {1} ewreg: input 1-bit write-back flag from EXE stage
+    @param {1} mwreg: input 1-bit write-back flag from MEM stage
+    @param {1} em2reg: input 1-bit WB Mux flag from EXE stage
+    @param {1} mm2reg: input 1-bit WB Mux flag from MEM stage
 
     @param {1} aSel: output 1-bit EXE A Mux select flag, selects a input for ALU
     @param {1} bSel: output 1-bit EXE B Mux select flag, selects b input for ALU
@@ -26,6 +30,8 @@
     @param {1} wreg: output 1-bit WB stage write flag, indicates whether WB stage
         should write to register file
     @param {3} immType: output 3-bit immediate type field, selects immediate type
+    @param {3} bType: output 3-bit branch type field, selects branch type, MSB can
+        be interpreted as an is-branch flag
     @param {1} isJalr: output 1-bit JALR flag, indicates whether instruction is JALR
     @param {1} signedComp: output 1-bit signed comparison flag, indicates whether
         comparison is signed or unsigned
@@ -39,6 +45,8 @@
         Counter should stall
     @param {1} ifidStall: output 1-bit IFID stall flag, indicates whether IFID
         Pipeline Register should stall
+    @param {1} instNop: output 1-bit instruction Mux flag, selects whether instruction
+        in IF stage should be executed or skipped
 */
 
 module ControlUnit (
@@ -48,6 +56,8 @@ module ControlUnit (
     input [6:0] opcode,
     input eq, lt,
     input [4:0] erd, mrd,
+    input ewreg, mwreg,
+    input em2reg, mm2reg,
 
     output reg aSel,
     output reg [1:0] bSel,
@@ -55,21 +65,27 @@ module ControlUnit (
     output reg rSel,
     output reg wmem, m2reg, wreg,
     output reg [2:0] immType,
+    output [2:0] bType,
     output reg isJalr, signedComp,
     output reg [1:0] qaSel, qbSel,
     output reg [1:0] pcSel,
-    output reg pcStall, ifidStall
+    output reg pcStall, ifidStall, instNop
 );
+    // assign for branch, this could be done in the always block but it's cleaner
+    // to do it here
+    reg isBranch;
+    assign bType = {isBranch, funct3[2], funct3[0]};
 
     always @(*) begin
         case (opcode) 
             7'b0110011: begin // register arithmetic operations
                 aSel = 1'b0;
-                bSel = 2'b0;
+                bSel = 2'h0;
                 wmem = 1'b0;
                 m2reg = 1'b0;
                 wreg = 1'b1;
                 immType = 3'hx;
+                isBranch = 1'b0;
                 isJalr = 1'bx;
                 pcSel = 2'h0;
                 case (funct3)
@@ -117,12 +133,13 @@ module ControlUnit (
             end
             7'b0111011: begin // 32-bit register arithmetic operations
                 aSel = 1'b0;
-                bSel = 2'b0;
+                bSel = 2'h0;
                 rSel = 1'b0;
                 wmem = 1'b0;
                 m2reg = 1'b0;
                 wreg = 1'b1;
-                immType = 3'bx;
+                immType = 3'hx;
+                isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
                 pcSel = 2'h0;
@@ -140,11 +157,12 @@ module ControlUnit (
             end
             7'b0010011: begin // immediate arithmetic operations
                 aSel = 1'b0;
-                bSel = 2'b1;
+                bSel = 2'h1;
                 wmem = 1'b0;
                 m2reg = 1'b0;
                 wreg = 1'b1;
                 immType = 3'h0;
+                isBranch = 1'b0;
                 isJalr = 1'bx;
                 pcSel = 2'h0;
                 case (funct3)
@@ -197,7 +215,8 @@ module ControlUnit (
                 wmem = 1'b0;
                 m2reg = 1'b0;
                 wreg = 1'b1;
-                immType = 3'hx;
+                immType = 3'h1;
+                isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
                 pcSel = 2'h0;
@@ -222,6 +241,7 @@ module ControlUnit (
                 m2reg = 1'bx;
                 wreg = 1'b0;
                 immType = 3'h2;
+                isBranch = 1'b1;
                 isJalr = 1'bx;
                 case (funct3)
                     3'b000: begin // BEQ
