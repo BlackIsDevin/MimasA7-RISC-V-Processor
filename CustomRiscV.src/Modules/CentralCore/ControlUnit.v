@@ -345,7 +345,7 @@ module ControlUnit (
             end
             7'b0110111: begin // LUI
                 aSel = 1'bx;
-                bSel = 2'h1
+                bSel = 2'h1;
                 aluc = 4'hB;
                 rSel = 1'b0;
                 wmem = 1'b0;
@@ -427,53 +427,55 @@ module ControlUnit (
                 rs2Usage = 1'b0;
             end
         endcase
-    end
 
-    // handle forwarding
-    if (ewreg & (erd != 5'h0) & (erd == rs1) & ~em2reg)
-        qaSel = 2'h1;
-    else if (mwreg & (mrd != 5'h0) & (mrd == rs1) & ~mm2reg)
-        qaSel = 2'h2;
-    else if (mwreg & (mrd != 5'h0) & (mrd == rs1) & mm2reg)
-        qaSel = 2'h3;
-    else
-        qaSel = 2'h0;
-
-    if (ewreg & (erd != 5'h0) & (erd == rs2) & ~em2reg)
-        qbSel = 2'h1;
-    else if (mwreg & (mrd != 5'h0) & (mrd == rs2) & ~mm2reg)
-        qbSel = 2'h2;
-    else if (mwreg & (mrd != 5'h0) & (mrd == rs2) & mm2reg)
-        qbSel = 2'h3;
-    else
-        qbSel = 2'h0;
-
-    // handle stalling for load words if needed
-    if (ewreg & em2reg & (ern != 5'h0) & (rd != 5'h0) & ((rs1Usage & (rd == rs1)) | (rs2Usage & (rd == rs2))))
-    begin
-        wreg = 1'b0;
-        wmem = 1'b0;
-        pcStall = 1'b1;
-        ifidStall = 1'b1;
-    end else begin
-        pcStall = 1'b0;
-        ifidStall = 1'b0;
-    end
+        // handle forwarding
+        if (ewreg && (erd != 5'h0) && (erd == rs1) && ~em2reg)
+            qaSel = 2'h1;
+        else if (mwreg & (mrd != 5'h0) & (mrd == rs1) & ~mm2reg)
+            qaSel = 2'h2;
+        else if (mwreg & (mrd != 5'h0) & (mrd == rs1) & mm2reg)
+            qaSel = 2'h3;
+        else
+            qaSel = 2'h0;
     
-    // handle forcing no-ops for branch instructions if needed
-    if (
-        (ebType == 3'h4 & eq == 1'b1) | // BEQ
-        (ebType == 3'h5 & eq == 1'b0) | // BNE
-        (ebType == 3'h6 & lt == 1'b1) | // BLT
-        (ebType == 3'h7 & lt == 1'b0)   // BGE
-    )
-    begin
-        wreg = 1'b0;
-        wmem = 1'b0;
-        pcSel = 2'h2;
-        instNop = 1'b1;
-    end else begin
-        instNop = 1'b0;
+        if (ewreg & (erd != 5'h0) & (erd == rs2) & ~em2reg)
+            qbSel = 2'h1;
+        else if (mwreg & (mrd != 5'h0) & (mrd == rs2) & ~mm2reg)
+            qbSel = 2'h2;
+        else if (mwreg & (mrd != 5'h0) & (mrd == rs2) & mm2reg)
+            qbSel = 2'h3;
+        else
+            qbSel = 2'h0;
+    
+        // handle stalling for load words if needed
+        if (ewreg & em2reg & (ern != 5'h0) & (rd != 5'h0) &
+            ((rs1Usage & (rd == rs1)) | (rs2Usage & (rd == rs2))))
+        begin
+            wreg = 1'b0;
+            wmem = 1'b0;
+            pcStall = 1'b1;
+            ifidStall = 1'b1;
+        end else begin
+            pcStall = 1'b0;
+            ifidStall = 1'b0;
+        end
+        
+        // handle forcing no-ops for branch instructions if needed
+        if (
+            (ebType == 3'h4 & eq == 1'b1) | // BEQ
+            (ebType == 3'h5 & eq == 1'b0) | // BNE
+            (ebType == 3'h6 & lt == 1'b1) | // BLT
+            (ebType == 3'h7 & lt == 1'b0)   // BGE
+        )
+        begin
+            wreg = 1'b0;
+            wmem = 1'b0;
+            pcSel = 2'h2;
+            instNop = 1'b1;
+        end else begin
+            instNop = 1'b0;
+        end
+        
     end
 
 
