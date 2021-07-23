@@ -76,7 +76,11 @@ module ControlUnit (
     reg isBranch;
     assign bType = {isBranch, funct3[2], funct3[0]};
 
+    // register for handling regfile usage, used for deciding stalling
+    reg rs1Usage, rs2Usage;
+
     always @(*) begin
+        // handle main instruction execution
         case (opcode) 
             7'b0110011: begin // register arithmetic operations
                 aSel = 1'b0;
@@ -87,6 +91,9 @@ module ControlUnit (
                 immType = 3'hx;
                 isBranch = 1'b0;
                 isJalr = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b1;
+                rs2Usage = 1'b1;
                 case (funct3)
                     3'b000: begin // ADD & SUB
                         aluc = funct7[5] ? 4'h1 : 4'h0;
@@ -141,6 +148,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b1;
+                rs2Usage = 1'b1;
                 case (funct3)
                     3'b000: begin // ADDW & SUBW
                         aluc = funct7[5] ? 4'h9 : 4'h8;
@@ -162,6 +172,9 @@ module ControlUnit (
                 immType = 3'h0;
                 isBranch = 1'b0;
                 isJalr = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b1;
+                rs2Usage = 1'b0;
                 case (funct3)
                     3'b000: begin // ADDI
                         aluc = 4'h0;
@@ -216,6 +229,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b1;
+                rs2Usage = 1'b0;
                 case (funct3)
                     3'b000: begin // ADDIW
                         aluc = 4'h8;
@@ -239,6 +255,9 @@ module ControlUnit (
                 immType = 3'h2;
                 isBranch = 1'b1;
                 isJalr = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b1;
+                rs2Usage = 1'b1;
                 case (funct3)
                     3'b000: begin // BEQ
                         signedComp = 1'bx;
@@ -272,6 +291,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b1;
+                rs2Usage = 1'b0;
             end
             7'b0100011: begin // Stores
                 aSel = 1'b0;
@@ -285,6 +307,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b1;
+                rs2Usage = 1'b1;
             end
             7'b0001111: begin // FENCE (no operation in our implementation)
                 aSel = 1'bx;
@@ -298,6 +323,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b0;
+                rs2Usage = 1'b0;
             end
             7'b1110011: begin // ECALL & EBREAK (unimplemented/NOP in this version)
                 aSel = 1'bx;
@@ -311,6 +339,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b0;
+                rs2Usage = 1'b0;
             end
             7'b0110111: begin // LUI
                 aSel = 1'bx;
@@ -324,6 +355,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b0;
+                rs2Usage = 1'b0;
             end
             7'b0010111: begin // AUIPC
                 aSel = 1'b1;
@@ -337,6 +371,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b0;
+                rs2Usage = 1'b0;
             end
             7'b1101111: begin // JAL
                 aSel = 1'b1;
@@ -350,6 +387,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'b0;
                 signedComp = 1'bx;
+                pcSel = 2'h1;
+                rs1Usage = 1'b0;
+                rs2Usage = 1'b0;
             end
             7'b1100111: begin // JALR
                 aSel = 1'b1;
@@ -363,6 +403,9 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'b1;
                 signedComp = 1'bx;
+                pcSel = 2'h1;
+                rs1Usage = 1'b1;
+                rs2Usage = 1'b0;
             end
             default: begin // handle invalid or unimplemented instructions
                 // for now, the behavior of invalid or unimplemented instructions
@@ -379,8 +422,58 @@ module ControlUnit (
                 isBranch = 1'b0;
                 isJalr = 1'bx;
                 signedComp = 1'bx;
+                pcSel = 2'h0;
+                rs1Usage = 1'b0;
+                rs2Usage = 1'b0;
             end
         endcase
+    end
+
+    // handle forwarding
+    if (ewreg & (erd != 5'h0) & (erd == rs1) & ~em2reg)
+        qaSel = 2'h1;
+    else if (mwreg & (mrd != 5'h0) & (mrd == rs1) & ~mm2reg)
+        qaSel = 2'h2;
+    else if (mwreg & (mrd != 5'h0) & (mrd == rs1) & mm2reg)
+        qaSel = 2'h3;
+    else
+        qaSel = 2'h0;
+
+    if (ewreg & (erd != 5'h0) & (erd == rs2) & ~em2reg)
+        qbSel = 2'h1;
+    else if (mwreg & (mrd != 5'h0) & (mrd == rs2) & ~mm2reg)
+        qbSel = 2'h2;
+    else if (mwreg & (mrd != 5'h0) & (mrd == rs2) & mm2reg)
+        qbSel = 2'h3;
+    else
+        qbSel = 2'h0;
+
+    // handle stalling for load words if needed
+    if (ewreg & em2reg & (ern != 5'h0) & (rd != 5'h0) & ((rs1Usage & (rd == rs1)) | (rs2Usage & (rd == rs2))))
+    begin
+        wreg = 1'b0;
+        wmem = 1'b0;
+        pcStall = 1'b1;
+        ifidStall = 1'b1;
+    end else begin
+        pcStall = 1'b0;
+        ifidStall = 1'b0;
+    end
+    
+    // handle forcing no-ops for branch instructions if needed
+    if (
+        (ebType == 3'h4 & eq == 1'b1) | // BEQ
+        (ebType == 3'h5 & eq == 1'b0) | // BNE
+        (ebType == 3'h6 & lt == 1'b1) | // BLT
+        (ebType == 3'h7 & lt == 1'b0)   // BGE
+    )
+    begin
+        wreg = 1'b0;
+        wmem = 1'b0;
+        pcSel = 2'h2;
+        instNop = 1'b1;
+    end else begin
+        instNop = 1'b0;
     end
 
 
