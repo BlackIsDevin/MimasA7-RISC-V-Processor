@@ -1,7 +1,7 @@
 /**
     This modules implements the ID/EXE pipeline register in our pipelined
         RV64 CPU. This is effectively just an array of D flip flops.
-    @author BlackIsDevin (https://github.com/BlackIsDevin)
+    @author: BlackIsDevin (https://github.com/BlackIsDevin)
 
     @param {5} rd: 5-bit input for destination register address
     @param {64} dpc: 64-bit input for instruction's program counter value
