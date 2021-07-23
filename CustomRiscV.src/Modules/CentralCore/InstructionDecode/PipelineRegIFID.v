@@ -13,12 +13,12 @@
 
 module PipelineRegIFID (
     input [63:0] pc,
-    input [63:0] inst,
+    input [31:0] inst,
     input clk,
     input stall,
 
     output reg [63:0] dpc,
-    output reg [63:0] dinst
+    output reg [31:0] dinst
 );
 
     always @(posedge clk) begin
