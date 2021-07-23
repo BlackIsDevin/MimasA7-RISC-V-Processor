@@ -2,7 +2,7 @@
     This module implements a comparator for our pipelined RV64 CPU. It
         handles both signed and unsigned comparison operations, and outputs
         whether the first operand is less than or equal to the second operand.
-    @author BlackIsDevin (https://github.com/BlackIsDevin)
+    @author: BlackIsDevin (https://github.com/BlackIsDevin)
 
     @param {64} eqa: 64-bit input of first operand to be compared
     @param {64} eqb: 64-bit input of second operand to be compared
