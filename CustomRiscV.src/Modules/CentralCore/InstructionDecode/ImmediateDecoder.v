@@ -57,7 +57,7 @@ module ImmediateDecoder (
                     1'b0
                 };
             default: // all other instructions in which immediates aren't used
-                decodedImmediate = 31'bX;
+                decodedImmediate = 31'hx;
         endcase
     end
 
