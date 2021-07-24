@@ -10,7 +10,7 @@
 */
 
 module ALU (
-    input [63:0] ea, eb,
+    input signed [63:0] ea, eb,
     input [3:0] ealuc,
 
     output reg [63:0] alur
@@ -18,6 +18,10 @@ module ALU (
 
     // temporary register for storing the result of 32-bit ALU operation
     reg [31:0] alur_lower;
+    
+    // wires for operands of 32-bit ALU operations, make case statement simpler
+    wire signed [31:0] ea_lower = ea[31:0];
+    wire signed [31:0] eb_lower = eb[31:0];
 
     always @(*) begin
         case (ealuc)
@@ -30,29 +34,14 @@ module ALU (
             4'h6: alur = ea >> eb;  // srl
             4'h7: alur = ea >>> eb; // sra
             
-            4'h8: begin             // 32-bit add
-                alur_lower = ea[31:0] + eb[31:0];
-                alur = {{32{alur_lower[31]}}, alur_lower[31:0]};
-            end
-            4'h9: begin             // 32-bit sub
-                alur_lower = ea[31:0] - eb[31:0];
-                alur = {{32{alur_lower[31]}}, alur_lower[31:0]};
-            end
-            4'hA: alur = ea;        // ea pass-through
-            4'hB: alur = eb;        // eb pass-through
-            4'hC: alur = 64'hx;     // undefined behavior, reserved for future use
-            4'hD: begin             // 32-bit sll
-                alur_lower = ea[31:0] << eb[31:0];
-                alur = {{32{alur_lower[31]}}, alur_lower[31:0]};
-            end
-            4'hE: begin             // 32-bit srl
-                alur_lower = ea[31:0] >> eb[31:0];
-                alur = {{32{alur_lower[31]}}, alur_lower[31:0]};
-            end
-            4'hF: begin             // 32-bit sra
-                alur_lower = ea[31:0] >>> eb[31:0];
-                alur = {{32{alur_lower[31]}}, alur_lower[31:0]};
-            end
+            4'h8: alur = $signed(ea_lower + eb_lower);   // 32-bit add
+            4'h9: alur = $signed(ea_lower - eb_lower);   // 32-bit sub
+            4'hA: alur = ea;                             // ea pass-through
+            4'hB: alur = eb;                             // eb pass-through
+            4'hC: alur = 64'hx;                          // undefined opcode
+            4'hD: alur = $signed(ea_lower << eb_lower);  // 32-bit sll
+            4'hE: alur = $signed(ea_lower >> eb_lower);  // 32-bit srl
+            4'hF: alur = $signed(ea_lower >>> eb_lower); // 32-bit sra
         endcase
     end
 
