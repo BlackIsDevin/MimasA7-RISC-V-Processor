@@ -16,7 +16,7 @@ module HardInstructionMemory(
     output reg [31:0] instruction
 );
 
-    reg [31:0] hardMemory [0:1023];
+    reg [31:0] hardMemory [0:256];
 
     integer i;
 
@@ -29,7 +29,10 @@ module HardInstructionMemory(
     end
     
     always @(*) begin
-        instruction = hardMemory[address[11:2]];
+        if (|address[63:10] == 0)
+            instruction = hardMemory[address[9:2]];
+        else
+            instruction = 32'b10011;
     end
 
 endmodule
