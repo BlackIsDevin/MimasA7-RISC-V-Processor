@@ -16,6 +16,8 @@ module ProgramCounter(
     output reg [63:0] pc
 );
 
+    initial pc = 64'h0;
+
     always @(posedge clk)
         if (stall == 0)
             pc <= nextPc;

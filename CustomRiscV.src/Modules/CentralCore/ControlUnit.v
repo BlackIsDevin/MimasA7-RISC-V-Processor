@@ -80,6 +80,17 @@ module ControlUnit (
     // register for handling regfile usage, used for deciding stalling
     reg rs1Usage, rs2Usage;
 
+    // initial values for the control unit
+    initial begin
+        wmem = 0;
+        wreg = 0;
+        isBranch = 0;
+        pcSel = 0;
+        pcStall = 0;
+        ifidStall = 0;
+        instNop = 0;
+    end
+
     always @(*) begin
         // handle main instruction execution
         case (opcode) 
