@@ -118,8 +118,8 @@ module CoreDatapath(
 
     // Control Unit
     ControlUnit controlUnit(
-        funct7, rs2, rs1, funct3, opcode, eq, lt, erd, mrd, ewreg, mwreg, em2reg,
-        mm2reg,
+        funct7, rs2, rs1, funct3, opcode, eq, lt, erd, mrd, rd, ewreg, mwreg,
+        em2reg, mm2reg, ebType,
         aSel, bSel, aluc, rSel, wmem, m2reg, wreg, immType, bType, isJalr,
         signedComp, qaSel, qbSel, pcSel, pcStall, ifidStall, instNop
     );
@@ -166,5 +166,5 @@ module CoreDatapath(
         wrd, wr, wd, wm2reg, wwreg
     );
     Gp2to1Mux #(64) wbMux (wr, wd, wm2reg, wbData);
-    
+
 endmodule

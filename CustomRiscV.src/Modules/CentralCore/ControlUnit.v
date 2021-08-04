@@ -55,9 +55,10 @@ module ControlUnit (
     input [2:0] funct3,
     input [6:0] opcode,
     input eq, lt,
-    input [4:0] erd, mrd,
+    input [4:0] erd, mrd, rd,
     input ewreg, mwreg,
     input em2reg, mm2reg,
+    input [2:0] ebType,
 
     output reg aSel,
     output reg [1:0] bSel,
@@ -448,7 +449,7 @@ module ControlUnit (
             qbSel = 2'h0;
     
         // handle stalling for load words if needed
-        if (ewreg & em2reg & (ern != 5'h0) & (rd != 5'h0) &
+        if (ewreg & em2reg & (erd != 5'h0) & (rd != 5'h0) &
             ((rs1Usage & (rd == rs1)) | (rs2Usage & (rd == rs2))))
         begin
             wreg = 1'b0;
