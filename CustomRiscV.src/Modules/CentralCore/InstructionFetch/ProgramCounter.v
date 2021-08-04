@@ -18,6 +18,6 @@ module ProgramCounter(
 
     always @(posedge clk)
         if (stall == 0)
-            nextPc <= pc;
+            pc <= nextPc;
 
 endmodule
