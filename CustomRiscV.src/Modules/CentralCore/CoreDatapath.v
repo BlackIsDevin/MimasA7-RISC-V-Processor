@@ -53,7 +53,7 @@ module CoreDatapath(
     assign rd     = dinst[11:7];
     assign funct3 = dinst[14:12];
     assign funct7 = dinst[31:25];
-    assugb opcode = dinst[6:0];
+    assign opcode = dinst[6:0];
 
     // Instruction Decode Stage Wires from Control Unit outputs
     wire [2:0]  immType;    // Type of immediate value based on instruction type
