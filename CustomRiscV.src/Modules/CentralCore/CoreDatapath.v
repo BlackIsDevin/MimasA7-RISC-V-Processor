@@ -153,4 +153,11 @@ module CoreDatapath(
     Comparator comparator (eqa, eqb, esignedComp, eq, lt);
     Gp2to1Mux #(64) exeRMux (alur, {63'h0, lt}, erSel, er);
 
+    // Memory Stage Modules
+    PipelineRegEXEMEM pipelineRegEXEMEM (
+        erd, er, eqb, ewmem, efunct3, em2reg, ewreg, clk,
+        mrd, mr, mqb, mwmem, mfunct3, mm2reg, mwreg
+    );
+    DataMemoryMapper dataMemoryMapper (mr, mqb, mwmem, mfunct3, clk, md);
+
 endmodule
