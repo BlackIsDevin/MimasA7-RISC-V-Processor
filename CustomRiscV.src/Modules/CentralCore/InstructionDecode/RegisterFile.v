@@ -31,7 +31,7 @@ module RegisterFile (
     end
 
     always @(negedge clk) begin
-        if (wwreg)
+        if (wwreg & (wrd != 0))
             regfile[wrd] <= wbd;
     end
 
