@@ -127,9 +127,9 @@ module CoreDatapath(
     // Instruction Fetch Stage Modules
     ProgramCounter programCounter(nextPc, clk, pcStall, pc);
     HardInstructionMemory hardInstructionMemory(pc, imOut);
-    Gp2to1Mux #(64) instMux (imOut, nop, instNop, inst);
+    Gp2to1Mux #(32) instMux (imOut, nop, instNop, inst);
     GpAdder #(64) pcAdder (64'h4, pc, pc4);
-    Gp4to1Mux #(64) pcSelMux (pc4, ctpc, er, er, pcSel, npc);
+    Gp4to1Mux #(64) pcSelMux (pc4, ctpc, er, er, pcSel, nextPc);
 
     // Instruction Decode Stage Modules
     PipelineRegIFID pipelineRegIFID (pc, inst, clk, ifidStall, dpc, dinst);
