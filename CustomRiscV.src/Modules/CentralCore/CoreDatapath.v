@@ -38,6 +38,8 @@ module CoreDatapath(
     wire [4:0]  rs2;        // Register Select 2
     wire [4:0]  rd;         // Destination Register
     wire [2:0]  funct3;     // 3-bit function code
+    wire [6:0]  funct7;     // 7-bit function code
+    wire [6:0]  opcode;     // Instruction opcode
     wire [63:0] rqa;        // Output of Regfile for Register A
     wire [63:0] rqb;        // Output of Regfile for Register B
     wire [63:0] qa;         // Output of forwarding mux for Register A
@@ -50,6 +52,8 @@ module CoreDatapath(
     assign rs2    = dinst[24:20];
     assign rd     = dinst[11:7];
     assign funct3 = dinst[14:12];
+    assign funct7 = dinst[31:25];
+    assugb opcode = dinst[6:0];
 
     // Instruction Decode Stage Wires from Control Unit outputs
     wire [2:0]  immType;    // Type of immediate value based on instruction type
@@ -112,6 +116,19 @@ module CoreDatapath(
     wire        wwreg;      // Register write enable in write back stage
     wire [63:0] wbData;     // Data to be written back to the regfile
 
-    // TODO: instantiate modules
+    // Control Unit
+    ControlUnit controlUnit(
+        funct7, rs2, rs1, funct3, opcode, eq, lt, erd, mrd, ewreg, mwreg, em2reg,
+        mm2reg,
+        aSel, bSel, aluc, rSel, wmem, m2reg, wreg, immType, bType, isJalr,
+        signedComp, qaSel, qbSel, pcSel, pcStall, ifidStall, instNop
+    );
+
+    // Instruction Fetch Stage Modules
+    ProgramCounter programCounter(nextPc, clk, pcStall, pc);
+    HardInstructionMemory hardInstructionMemory(pc, imOut);
+    Gp2to1Mux #(64) instMux (imOut, nop, instNop, inst);
+    GpAdder #(64) pcAdder (64'h4, pc, pc4);
+    Gp4to1Mux #(64) pcSelMux (pc4, ctpc, er, er, pcSel, npc);
 
 endmodule
