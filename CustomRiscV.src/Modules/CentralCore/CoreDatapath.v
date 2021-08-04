@@ -160,4 +160,11 @@ module CoreDatapath(
     );
     DataMemoryMapper dataMemoryMapper (mr, mqb, mwmem, mfunct3, clk, md);
 
+    // Write Back Stage Modules
+    PipelineRegMEMWB pipelineRegMEMWB (
+        mrd, mr, md, mm2reg, mwreg, clk,
+        wrd, wr, wd, wm2reg, wwreg
+    );
+    Gp2to1Mux #(64) wbMux (wr, wd, wm2reg, wbData);
+    
 endmodule
