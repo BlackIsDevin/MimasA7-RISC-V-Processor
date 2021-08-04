@@ -131,4 +131,13 @@ module CoreDatapath(
     GpAdder #(64) pcAdder (64'h4, pc, pc4);
     Gp4to1Mux #(64) pcSelMux (pc4, ctpc, er, er, pcSel, npc);
 
+    // Instruction Decode Stage Modules
+    PipelineRegIFID pipelineRegIFID (pc, inst, clk, ifidStall, dpc, dinst);
+    RegisterFile registerFile (rs1, rs2, wrd, wbData, wwreg, clk, rqa, rqb);
+    ImmediateDecoder immediateDecoder (dinst[31:7], immType, imm64);
+    Gp4to1Mux #(64) fwdaMux (rqa, er, mr, md, qaSel, qa);
+    Gp4to1Mux #(64) fwdbMux (rqb, er, mr, md, qbSel, qb);
+    Gp2to1Mux #(64) jalrMux (dpc, qa, isJalr, ctqa);
+    GpAdder #(64) ctpcAdder (ctqa, imm64, ctpc);
+
 endmodule
