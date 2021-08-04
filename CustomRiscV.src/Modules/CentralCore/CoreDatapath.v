@@ -83,7 +83,7 @@ module CoreDatapath(
     wire [3:0]  ealuc;      // ALU Control in execute stage
     wire        erSel;      // Selector whether ALU or Comparitor result is used in execute stage
     wire        ewmem;      // Memory write enable in execute stage
-    wire [2:0]  efunc3;     // 3-bit function code in execute stage
+    wire [2:0]  efunct3;    // 3-bit function code in execute stage
     wire        em2reg;     // Memory to register selector in execute stage
     wire        ewreg;      // Register write enable in execute stage
     wire [2:0]  ebType;     // Type of branch in execute stage
@@ -102,7 +102,7 @@ module CoreDatapath(
     wire [63:0] mr;         // execution stage result in memory stage
     wire [63:0] mqb;        // Output of forwarding mux for Register B in memory stage
     wire        mwmem;      // Memory write enable in memory stage
-    wire [2:0]  mfunc3;     // 3-bit function code in memory stage
+    wire [2:0]  mfunct3;    // 3-bit function code in memory stage
     wire        mm2reg;     // Memory to register selector in memory stage
     wire        mwreg;      // Register write enable in memory stage
     wire [63:0] md;         // Data Memory output
@@ -139,5 +139,18 @@ module CoreDatapath(
     Gp4to1Mux #(64) fwdbMux (rqb, er, mr, md, qbSel, qb);
     Gp2to1Mux #(64) jalrMux (dpc, qa, isJalr, ctqa);
     GpAdder #(64) ctpcAdder (ctqa, imm64, ctpc);
+
+    // Execution Stage Modules
+    PipelineRegIDEXE pipelineRegIDEXE (
+        rd, dpc, qa, qb, imm64, signedComp, funct3, aSel, bSel, aluc, rSel,
+        wmem, m2reg, wreg, bType, clk,
+        erd, epc, eqa, eqb, eimm64, esignedComp, efunct3, eaSel, ebSel, ealuc,
+        erSel, ewmem, em2reg, ewreg, ebType
+    );
+    Gp2to1Mux #(64) exeAMux (eqa, epc, eaSel, ea);
+    Gp4to1Mux #(64) exeBMux (eqb, eimm64, 64'h4, 64'h4, ebSel, eb);
+    ALU alu (ea, eb, ealuc, alur);
+    Comparator comparator (eqa, eqb, esignedComp, eq, lt);
+    Gp2to1Mux #(64) exeRMux (alur, {63'h0, lt}, erSel, er);
 
 endmodule
