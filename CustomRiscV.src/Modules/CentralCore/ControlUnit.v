@@ -248,7 +248,7 @@ module ControlUnit (
                 aSel = 1'b1;
                 bSel = 2'h1;
                 aluc = 4'h0;
-                rSel = 1'bx;
+                rSel = 1'b0;
                 wmem = 1'b0;
                 m2reg = 1'bx;
                 wreg = 1'b0;
