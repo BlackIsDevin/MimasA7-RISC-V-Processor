@@ -60,7 +60,7 @@ module PipelineRegIDEXE (
     output reg [63:0] eqa,
     output reg [63:0] eqb,
     output reg [63:0] eimm64,
-    output reg signedComp,
+    output reg esignedComp,
     output reg [2:0] efunc3,
     output reg eaSel,
     output reg [1:0] ebSel,
