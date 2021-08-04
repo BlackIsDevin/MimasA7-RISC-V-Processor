@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="DatapathTestbench_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="DatapathTestbench" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="74.701 ns"></ZoomEndTime>
+      <Cursor1Time time="0.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="116"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="74" />
+   <wvobject fp_name="/DatapathTestbench/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/pcSel" type="array">
+      <obj_property name="ElementShortName">pcSel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">pcSel[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/pcStall" type="logic">
+      <obj_property name="ElementShortName">pcStall</obj_property>
+      <obj_property name="ObjectShortName">pcStall</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/pc" type="array">
+      <obj_property name="ElementShortName">pc[63:0]</obj_property>
+      <obj_property name="ObjectShortName">pc[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/nextPc" type="array">
+      <obj_property name="ElementShortName">nextPc[63:0]</obj_property>
+      <obj_property name="ObjectShortName">nextPc[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/pc4" type="array">
+      <obj_property name="ElementShortName">pc4[63:0]</obj_property>
+      <obj_property name="ObjectShortName">pc4[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/imOut" type="array">
+      <obj_property name="ElementShortName">imOut[31:0]</obj_property>
+      <obj_property name="ObjectShortName">imOut[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/inst" type="array">
+      <obj_property name="ElementShortName">inst[31:0]</obj_property>
+      <obj_property name="ObjectShortName">inst[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/nop" type="array">
+      <obj_property name="ElementShortName">nop[31:0]</obj_property>
+      <obj_property name="ObjectShortName">nop[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/instNop" type="logic">
+      <obj_property name="ElementShortName">instNop</obj_property>
+      <obj_property name="ObjectShortName">instNop</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/dinst" type="array">
+      <obj_property name="ElementShortName">dinst[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dinst[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/dpc" type="array">
+      <obj_property name="ElementShortName">dpc[63:0]</obj_property>
+      <obj_property name="ObjectShortName">dpc[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ifidStall" type="logic">
+      <obj_property name="ElementShortName">ifidStall</obj_property>
+      <obj_property name="ObjectShortName">ifidStall</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/rs1" type="array">
+      <obj_property name="ElementShortName">rs1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs1[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/rs2" type="array">
+      <obj_property name="ElementShortName">rs2[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs2[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/rd" type="array">
+      <obj_property name="ElementShortName">rd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rd[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/funct3" type="array">
+      <obj_property name="ElementShortName">funct3[2:0]</obj_property>
+      <obj_property name="ObjectShortName">funct3[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/funct7" type="array">
+      <obj_property name="ElementShortName">funct7[6:0]</obj_property>
+      <obj_property name="ObjectShortName">funct7[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/opcode" type="array">
+      <obj_property name="ElementShortName">opcode[6:0]</obj_property>
+      <obj_property name="ObjectShortName">opcode[6:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/rqa" type="array">
+      <obj_property name="ElementShortName">rqa[63:0]</obj_property>
+      <obj_property name="ObjectShortName">rqa[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/rqb" type="array">
+      <obj_property name="ElementShortName">rqb[63:0]</obj_property>
+      <obj_property name="ObjectShortName">rqb[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/qa" type="array">
+      <obj_property name="ElementShortName">qa[63:0]</obj_property>
+      <obj_property name="ObjectShortName">qa[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/qb" type="array">
+      <obj_property name="ElementShortName">qb[63:0]</obj_property>
+      <obj_property name="ObjectShortName">qb[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/imm64" type="array">
+      <obj_property name="ElementShortName">imm64[63:0]</obj_property>
+      <obj_property name="ObjectShortName">imm64[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ctqa" type="array">
+      <obj_property name="ElementShortName">ctqa[63:0]</obj_property>
+      <obj_property name="ObjectShortName">ctqa[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ctpc" type="array">
+      <obj_property name="ElementShortName">ctpc[63:0]</obj_property>
+      <obj_property name="ObjectShortName">ctpc[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/immType" type="array">
+      <obj_property name="ElementShortName">immType[2:0]</obj_property>
+      <obj_property name="ObjectShortName">immType[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/qaSel" type="array">
+      <obj_property name="ElementShortName">qaSel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">qaSel[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/qbSel" type="array">
+      <obj_property name="ElementShortName">qbSel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">qbSel[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/isJalr" type="logic">
+      <obj_property name="ElementShortName">isJalr</obj_property>
+      <obj_property name="ObjectShortName">isJalr</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/signedComp" type="logic">
+      <obj_property name="ElementShortName">signedComp</obj_property>
+      <obj_property name="ObjectShortName">signedComp</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/aSel" type="logic">
+      <obj_property name="ElementShortName">aSel</obj_property>
+      <obj_property name="ObjectShortName">aSel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/bSel" type="array">
+      <obj_property name="ElementShortName">bSel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">bSel[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/aluc" type="array">
+      <obj_property name="ElementShortName">aluc[3:0]</obj_property>
+      <obj_property name="ObjectShortName">aluc[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/rSel" type="logic">
+      <obj_property name="ElementShortName">rSel</obj_property>
+      <obj_property name="ObjectShortName">rSel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/wmem" type="logic">
+      <obj_property name="ElementShortName">wmem</obj_property>
+      <obj_property name="ObjectShortName">wmem</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/m2reg" type="logic">
+      <obj_property name="ElementShortName">m2reg</obj_property>
+      <obj_property name="ObjectShortName">m2reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/wreg" type="logic">
+      <obj_property name="ElementShortName">wreg</obj_property>
+      <obj_property name="ObjectShortName">wreg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/bType" type="array">
+      <obj_property name="ElementShortName">bType[2:0]</obj_property>
+      <obj_property name="ObjectShortName">bType[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/erd" type="array">
+      <obj_property name="ElementShortName">erd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">erd[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/epc" type="array">
+      <obj_property name="ElementShortName">epc[63:0]</obj_property>
+      <obj_property name="ObjectShortName">epc[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/eqa" type="array">
+      <obj_property name="ElementShortName">eqa[63:0]</obj_property>
+      <obj_property name="ObjectShortName">eqa[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/esignedComp" type="logic">
+      <obj_property name="ElementShortName">esignedComp</obj_property>
+      <obj_property name="ObjectShortName">esignedComp</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/eqb" type="array">
+      <obj_property name="ElementShortName">eqb[63:0]</obj_property>
+      <obj_property name="ObjectShortName">eqb[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/eimm64" type="array">
+      <obj_property name="ElementShortName">eimm64[63:0]</obj_property>
+      <obj_property name="ObjectShortName">eimm64[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/eaSel" type="logic">
+      <obj_property name="ElementShortName">eaSel</obj_property>
+      <obj_property name="ObjectShortName">eaSel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ebSel" type="array">
+      <obj_property name="ElementShortName">ebSel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ebSel[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ealuc" type="array">
+      <obj_property name="ElementShortName">ealuc[3:0]</obj_property>
+      <obj_property name="ObjectShortName">ealuc[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/erSel" type="logic">
+      <obj_property name="ElementShortName">erSel</obj_property>
+      <obj_property name="ObjectShortName">erSel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ewmem" type="logic">
+      <obj_property name="ElementShortName">ewmem</obj_property>
+      <obj_property name="ObjectShortName">ewmem</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/efunct3" type="array">
+      <obj_property name="ElementShortName">efunct3[2:0]</obj_property>
+      <obj_property name="ObjectShortName">efunct3[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/em2reg" type="logic">
+      <obj_property name="ElementShortName">em2reg</obj_property>
+      <obj_property name="ObjectShortName">em2reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ewreg" type="logic">
+      <obj_property name="ElementShortName">ewreg</obj_property>
+      <obj_property name="ObjectShortName">ewreg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ebType" type="array">
+      <obj_property name="ElementShortName">ebType[2:0]</obj_property>
+      <obj_property name="ObjectShortName">ebType[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/ea" type="array">
+      <obj_property name="ElementShortName">ea[63:0]</obj_property>
+      <obj_property name="ObjectShortName">ea[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/eb" type="array">
+      <obj_property name="ElementShortName">eb[63:0]</obj_property>
+      <obj_property name="ObjectShortName">eb[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/alur" type="array">
+      <obj_property name="ElementShortName">alur[63:0]</obj_property>
+      <obj_property name="ObjectShortName">alur[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/lt" type="logic">
+      <obj_property name="ElementShortName">lt</obj_property>
+      <obj_property name="ObjectShortName">lt</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/eq" type="logic">
+      <obj_property name="ElementShortName">eq</obj_property>
+      <obj_property name="ObjectShortName">eq</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/er" type="array">
+      <obj_property name="ElementShortName">er[63:0]</obj_property>
+      <obj_property name="ObjectShortName">er[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/mrd" type="array">
+      <obj_property name="ElementShortName">mrd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">mrd[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/mr" type="array">
+      <obj_property name="ElementShortName">mr[63:0]</obj_property>
+      <obj_property name="ObjectShortName">mr[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/mqb" type="array">
+      <obj_property name="ElementShortName">mqb[63:0]</obj_property>
+      <obj_property name="ObjectShortName">mqb[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/mwmem" type="logic">
+      <obj_property name="ElementShortName">mwmem</obj_property>
+      <obj_property name="ObjectShortName">mwmem</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/mfunct3" type="array">
+      <obj_property name="ElementShortName">mfunct3[2:0]</obj_property>
+      <obj_property name="ObjectShortName">mfunct3[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/mm2reg" type="logic">
+      <obj_property name="ElementShortName">mm2reg</obj_property>
+      <obj_property name="ObjectShortName">mm2reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/mwreg" type="logic">
+      <obj_property name="ElementShortName">mwreg</obj_property>
+      <obj_property name="ObjectShortName">mwreg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/md" type="array">
+      <obj_property name="ElementShortName">md[63:0]</obj_property>
+      <obj_property name="ObjectShortName">md[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/wrd" type="array">
+      <obj_property name="ElementShortName">wrd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">wrd[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/wr" type="array">
+      <obj_property name="ElementShortName">wr[63:0]</obj_property>
+      <obj_property name="ObjectShortName">wr[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/wd" type="array">
+      <obj_property name="ElementShortName">wd[63:0]</obj_property>
+      <obj_property name="ObjectShortName">wd[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/wm2reg" type="logic">
+      <obj_property name="ElementShortName">wm2reg</obj_property>
+      <obj_property name="ObjectShortName">wm2reg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/wwreg" type="logic">
+      <obj_property name="ElementShortName">wwreg</obj_property>
+      <obj_property name="ObjectShortName">wwreg</obj_property>
+   </wvobject>
+   <wvobject fp_name="/DatapathTestbench/coreDatapath/wbData" type="array">
+      <obj_property name="ElementShortName">wbData[63:0]</obj_property>
+      <obj_property name="ObjectShortName">wbData[63:0]</obj_property>
+   </wvobject>
+</wave_config>
