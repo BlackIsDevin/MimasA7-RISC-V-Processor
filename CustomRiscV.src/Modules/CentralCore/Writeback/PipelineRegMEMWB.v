@@ -25,11 +25,11 @@ module PipelineRegMEMWB (
     input mwreg,
     input clk,
 
-    output [4:0] wrd,
-    output [63:0] wr,
-    output [63:0] wd,
-    output wm2reg,
-    output wwreg
+    output reg [4:0] wrd,
+    output reg [63:0] wr,
+    output reg [63:0] wd,
+    output reg wm2reg,
+    output reg wwreg
 );
 
     always @(posedge clk) begin
