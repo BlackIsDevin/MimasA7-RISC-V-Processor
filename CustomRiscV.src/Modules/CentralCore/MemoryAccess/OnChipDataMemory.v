@@ -27,84 +27,143 @@ module OnChipDataMemory (
     output reg [63:0] readData
 );
 
-    // 2 Kilobytes of on-chip memory
-    reg [7:0] memory [0:2047];
+    // direct connections to the memory
+    reg [63:0] bramDataIn;
+    reg [63:0] bramDataOut;
 
-    always @(negedge clk) begin
-        if (writeEnable == 1) begin
-            case(size)
-            2'h0: begin
-                memory[address + 0] <= writeData[7:0]; 
-            end
-            2'h1: begin
-                memory[address + 0] <= writeData[7:0];
-                memory[address + 1] <= writeData[15:8];
-            end
-            2'h2: begin
-                memory[address + 0] <= writeData[7:0];
-                memory[address + 1] <= writeData[15:8];
-                memory[address + 2] <= writeData[23:16];
-                memory[address + 3] <= writeData[31:24];
-            end
-            2'h3: begin
-                memory[address + 0] <= writeData[7:0];
-                memory[address + 1] <= writeData[15:8];
-                memory[address + 2] <= writeData[23:16];
-                memory[address + 3] <= writeData[31:24];
-                memory[address + 4] <= writeData[39:32];
-                memory[address + 5] <= writeData[47:40];
-                memory[address + 6] <= writeData[55:48];
-                memory[address + 7] <= writeData[63:56];
-            end
-            endcase
-        end
+    // 2 Kilobytes of on-chip memory
+    reg [63:0] memory [0:255];
+
+    // TODO: initialize memory with zeroes
+
+    // this is awful lol
+    always @(*) begin
+        case (size)
+            2'b00: begin // 8-bit operations
+            case (address[2:0])
+                3'b000: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[7:0]);
+                    else
+                        readData = $unsigned(bramDataOut[7:0]);
+                    bramDataIn = {bramDataOut[63:8], writeData[7:0]};
+                end
+                3'b001: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[15:8]);
+                    else
+                        readData = $unsigned(bramDataOut[15:8]);
+                    bramDataIn = {bramDataOut[63:16], writeData[15:8], bramDataOut[7:0]};
+                end
+                3'b010: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[23:16]);
+                    else
+                        readData = $unsigned(bramDataOut[23:16]);
+                    bramDataIn = {bramDataOut[63:24], writeData[23:16], bramDataOut[15:0]};
+                end
+                3'b011: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[31:24]);
+                    else
+                        readData = $unsigned(bramDataOut[31:24]);
+                    bramDataIn = {bramDataOut[63:32], writeData[31:24], bramDataOut[23:0]};
+                end
+                3'b100: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[39:32]);
+                    else
+                        readData = $unsigned(bramDataOut[39:32]);
+                    bramDataIn = {bramDataOut[63:40], writeData[39:32], bramDataOut[31:0]};
+                end
+                3'b101: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[47:40]);
+                    else
+                        readData = $unsigned(bramDataOut[47:40]);
+                    bramDataIn = {bramDataOut[63:48], writeData[47:40], bramDataOut[39:0]};
+                end
+                3'b110: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[55:48]);
+                    else
+                        readData = $unsigned(bramDataOut[55:48]);
+                    bramDataIn = {bramDataOut[63:56], writeData[55:48], bramDataOut[47:0]};
+                end
+                3'b111: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[63:56]);
+                    else
+                        readData = $unsigned(bramDataOut[63:56]);
+                    bramDataIn = {writeData[63:56], bramDataOut[55:0]};
+                end
+            endcase 
+            end // end 8-bit operations
+            2'b01: begin // 16-bit operations
+            // in this case, if address[0] is not zero, misaligned access exception occurs
+            // this exception currently doesn't occur, and will be implemented in the future
+            case (address[2:1])
+                2'b00: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[15:0]);
+                    else
+                        readData = $unsigned(bramDataOut[15:0]);
+                    bramDataIn = {bramDataOut[63:16], writeData[15:0]};
+                end
+                2'b01: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[31:16]);
+                    else
+                        readData = $unsigned(bramDataOut[31:16]);
+                    bramDataIn = {bramDataOut[63:32], writeData[31:16], bramDataOut[15:0]};
+                end
+                2'b10: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[47:32]);
+                    else
+                        readData = $unsigned(bramDataOut[47:32]);
+                    bramDataIn = {bramDataOut[63:48], writeData[47:32], bramDataOut[31:0]};
+                end
+                2'b11: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[63:48]);
+                    else
+                        readData = $unsigned(bramDataOut[63:48]);
+                    bramDataIn = {writeData[63:48], bramDataOut[47:0]};
+                end
+            endcase 
+            end // end 16-bit operations
+            2'b10: begin // 32-bit operations
+            // in this case, if address[1:0] is not zero, misaligned access exception occurs
+            // this exception currently doesn't occur, and will be implemented in the future
+            case (address[2])
+                1'b0: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[31:0]);
+                    else
+                        readData = $unsigned(bramDataOut[31:0]);
+                    bramDataIn = {bramDataOut[63:32], writeData[31:0]};
+                end
+                1'b1: begin
+                    if (signExtended)
+                        readData = $signed(bramDataOut[63:32]);
+                    else
+                        readData = $unsigned(bramDataOut[63:32]);
+                    bramDataIn = {writeData[63:32], bramDataOut[31:0]};
+                end
+            endcase 
+            end // end 32-bit operations
+            2'b11: begin // 64-bit operations
+                readData = bramDataOut;
+                bramDataIn = writeData;
+            end // end 64-bit operations
+        endcase
     end
 
-    always @(*) begin
-        case({~signExtended, size})
-        2'h0: begin
-            readData = $signed(memory[address]);
-        end
-        2'h1: begin
-            readData[7:0] = memory[address + 0];
-            readData[63:8] = $signed(memory[address + 1]);
-        end
-        2'h2: begin
-            readData[7:0] = memory[address + 0];
-            readData[15:8] = memory[address + 1];
-            readData[23:16] = memory[address + 2];
-            readData[63:24] = $signed(memory[address + 3]);
-        end
-        2'h3: begin
-            readData[7:0] = memory[address + 0];
-            readData[15:8] = memory[address + 1];
-            readData[23:16] = memory[address + 2];
-            readData[31:24] = memory[address + 3];
-            readData[39:32] = memory[address + 4];
-            readData[47:40] = memory[address + 5];
-            readData[55:48] = memory[address + 6];
-            readData[63:56] = memory[address + 7];
-        end
-        2'h4: begin
-            readData[7:0] = memory[address];
-            readData[63:8] = 56'h0;
-        end
-        2'h5: begin
-            readData[7:0] = memory[address + 0];
-            readData[15:8] = memory[address + 1];
-            readData[63:16] = 48'h0;
-        end
-        2'h6: begin
-            readData[7:0] = memory[address + 0];
-            readData[15:8] = memory[address + 1];
-            readData[23:16] = memory[address + 2];
-            readData[31:24] = memory[address + 3];
-            readData[63:32] = 32'h0;
-        end
-        2'h7: begin // not a valid function code
-            readData = 64'hx;
-        end
-        endcase
+    always @(negedge clk) begin
+        if (writeEnable == 1'b1)
+            memory[address[10:3]] = bramDataIn;
+        bramDataOut = memory[address[10:3]];
     end
 
 endmodule
