@@ -34,7 +34,11 @@ module OnChipDataMemory (
     // 2 Kilobytes of on-chip memory
     reg [63:0] memory [0:255];
 
-    // TODO: initialize memory with zeroes
+    integer i;
+    initial begin
+        for (i = 0; i < 256; i = i + 1)
+            memory[i] = 64'b0;
+    end
 
     // this is awful lol
     always @(*) begin
