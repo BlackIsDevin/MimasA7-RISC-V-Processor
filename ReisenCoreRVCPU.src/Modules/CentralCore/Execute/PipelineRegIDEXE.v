@@ -18,6 +18,7 @@
     @param {1} m2reg: 1-bit input for WB Mux select flag
     @param {1} wreg: 1-bit input for register-write flag
     @param {3} bType: 3-bit input for branch type
+    @param {1} isJal: i-bit input indicating if this is a JAL or JALR instruction
     @param {1} clk: 1-bit input for clock signal
 
     @param {5} erd: 5-bit output for destination register address
@@ -35,6 +36,7 @@
     @param {1} em2reg: 1-bit output for WB Mux select flag
     @param {1} ewreg: 1-bit output for register-write flag
     @param {3} ebType: 3-bit output for branch type
+    @param {1} eisJal: 1-bit output indicating if this is a JAL or JALR instruction
 */
 
 module PipelineRegIDEXE (
@@ -46,13 +48,14 @@ module PipelineRegIDEXE (
     input signedComp,
     input [2:0] func3,
     input aSel,
-    input [1:0] bSel,
+    input bSel,
     input [3:0] aluc,
-    input rSel,
+    input [1:0] rSel,
     input wmem,
     input m2reg,
     input wreg,
     input [2:0] bType,
+    input isJal,
     input clk,
 
     output reg [4:0] erd,
@@ -63,13 +66,14 @@ module PipelineRegIDEXE (
     output reg esignedComp,
     output reg [2:0] efunc3,
     output reg eaSel,
-    output reg [1:0] ebSel,
+    output reg ebSel,
     output reg [3:0] ealuc,
-    output reg erSel,
+    output reg [1:0] erSel,
     output reg ewmem,
     output reg em2reg,
     output reg ewreg,
-    output reg [2:0] ebType
+    output reg [2:0] ebType,
+    output reg eisJal
 );
 
     always @(posedge clk) begin
@@ -88,6 +92,7 @@ module PipelineRegIDEXE (
         em2reg <= m2reg;
         ewreg <= wreg;
         ebType <= bType;
+        eisJal <= isJal;
     end
 
 endmodule

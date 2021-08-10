@@ -16,7 +16,7 @@ module CoreDatapath(
     
     // Instruction Fetch Stage Wires
 
-    wire [1:0]  pcSel;      // Selects the next value of the program counter
+    wire        pcSel;      // Selects the next value of the program counter
     wire        pcStall;    // Stalls the instruction fetch stage if needed
     wire [63:0] pc;         // Program Counter output
     wire [63:0] nextPc;     // Next value of the Program Counter
@@ -45,8 +45,7 @@ module CoreDatapath(
     wire [63:0] qa;         // Output of forwarding mux for Register A
     wire [63:0] qb;         // Output of forwarding mux for Register B
     wire [63:0] imm64;      // 64-bit immediate value from immediate decoder
-    wire [63:0] ctqa;       // Control Transfer qa, added to imm64 for jal and jalr
-    wire [63:0] ctpc;       // Control Transfer Program Counter, used for jal and jalr
+    wire [63:0] jalpc;      // Jump and Link Program Counter, used for nextPc on JAL
 
     assign rs1    = dinst[19:15];
     assign rs2    = dinst[24:20];
@@ -59,12 +58,12 @@ module CoreDatapath(
     wire [2:0]  immType;    // Type of immediate value based on instruction type
     wire [1:0]  qaSel;      // Fowarding select for Register A
     wire [1:0]  qbSel;      // Fowarding select for Register B
-    wire        isJalr;     // Indicates if instruction is jalr or jal
+    wire        isJal;      // Indicates if instruction is a jal or jalr
     wire        signedComp; // Indicates if compare in EXE is signed or unsigned
     wire        aSel;       // Selector for EXE A input
-    wire [1:0]  bSel;       // Selector for EXE B input
+    wire        bSel;       // Selector for EXE B input
     wire [3:0]  aluc;       // ALU Control
-    wire        rSel;       // Selector whether ALU or Comparitor result is used
+    wire [1:0]  rSel;       // Selector whether ALU or Comparitor result is used
     wire        wmem;       // Memory write enable
     wire        m2reg;      // Memory to register selector
     wire        wreg;       // Register write enable
@@ -79,18 +78,20 @@ module CoreDatapath(
     wire [63:0] eqb;        // Output of forwarding mux for Register B in execute stage
     wire [63:0] eimm64;     // 64-bit immediate value in execute stage
     wire        eaSel;      // Selector for EXE A input in execute stage
-    wire [1:0]  ebSel;      // Selector for EXE B input in execute stage
+    wire        ebSel;      // Selector for EXE B input in execute stage
     wire [3:0]  ealuc;      // ALU Control in execute stage
-    wire        erSel;      // Selector whether ALU or Comparitor result is used in execute stage
+    wire [1:0]  erSel;      // Selector whether ALU or Comparitor result is used in execute stage
     wire        ewmem;      // Memory write enable in execute stage
     wire [2:0]  efunct3;    // 3-bit function code in execute stage
     wire        em2reg;     // Memory to register selector in execute stage
     wire        ewreg;      // Register write enable in execute stage
     wire [2:0]  ebType;     // Type of branch in execute stage
+    wire        eisJal;    // Indicates if instruction is a jal or jalr in execute stage
 
     // Execution Stage Wires (excluding ID/EXE Register outputs)
     wire [63:0] ea;         // EXE A input
     wire [63:0] eb;         // EXE B input
+    wire [63:0] epc4;       // Program Counter in execute stage plus 4
     wire [63:0] alur;       // ALU result output
     wire        lt;         // indicates eqa < eqb
     wire        eq;         // indicates eqa = eqb
@@ -119,8 +120,8 @@ module CoreDatapath(
     // Control Unit
     ControlUnit controlUnit(
         funct7, rs2, rs1, funct3, opcode, eq, lt, erd, mrd, rd, ewreg, mwreg,
-        em2reg, mm2reg, ebType,
-        aSel, bSel, aluc, rSel, wmem, m2reg, wreg, immType, bType, isJalr,
+        em2reg, mm2reg, ebType, eisJal,
+        aSel, bSel, aluc, rSel, wmem, m2reg, wreg, immType, bType, isJal,
         signedComp, qaSel, qbSel, pcSel, pcStall, ifidStall, instNop
     );
 
@@ -129,7 +130,7 @@ module CoreDatapath(
     HardInstructionMemory hardInstructionMemory(pc, imOut);
     Gp2to1Mux #(32) instMux (imOut, nop, instNop, inst);
     GpAdder #(64) pcAdder (64'h4, pc, pc4);
-    Gp4to1Mux #(64) pcSelMux (pc4, ctpc, er, er, pcSel, nextPc);
+    Gp2to1Mux #(64) pcSelMux (pc4, alur, pcSel, nextPc);
 
     // Instruction Decode Stage Modules
     PipelineRegIFID pipelineRegIFID (pc, inst, clk, ifidStall, dpc, dinst);
@@ -137,21 +138,20 @@ module CoreDatapath(
     ImmediateDecoder immediateDecoder (dinst[31:7], immType, imm64);
     Gp4to1Mux #(64) fwdaMux (rqa, er, mr, md, qaSel, qa);
     Gp4to1Mux #(64) fwdbMux (rqb, er, mr, md, qbSel, qb);
-    Gp2to1Mux #(64) jalrMux (dpc, qa, isJalr, ctqa);
-    GpAdder #(64) ctpcAdder (ctqa, imm64, ctpc);
 
     // Execution Stage Modules
     PipelineRegIDEXE pipelineRegIDEXE (
         rd, dpc, qa, qb, imm64, signedComp, funct3, aSel, bSel, aluc, rSel,
-        wmem, m2reg, wreg, bType, clk,
+        wmem, m2reg, wreg, bType, isJal, clk,
         erd, epc, eqa, eqb, eimm64, esignedComp, efunct3, eaSel, ebSel, ealuc,
-        erSel, ewmem, em2reg, ewreg, ebType
+        erSel, ewmem, em2reg, ewreg, ebType, eisJal
     );
     Gp2to1Mux #(64) exeAMux (eqa, epc, eaSel, ea);
-    Gp4to1Mux #(64) exeBMux (eqb, eimm64, 64'h4, 64'h4, ebSel, eb);
+    Gp2to1Mux #(64) exeBMux (eqb, eimm64, ebSel, eb);
     ALU alu (ea, eb, ealuc, alur);
     Comparator comparator (eqa, eqb, esignedComp, eq, lt);
-    Gp2to1Mux #(64) exeRMux (alur, {63'h0, lt}, erSel, er);
+    GpAdder #(64) jalAdder (64'h4, epc, epc4);
+    Gp4to1Mux #(64) exeRMux (alur, {63'h0, lt}, epc4, epc4, erSel, er);
 
     // Memory Stage Modules
     PipelineRegEXEMEM pipelineRegEXEMEM (
